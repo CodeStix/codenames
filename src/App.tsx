@@ -53,7 +53,6 @@ function App() {
 
     return (
         <div style={{ display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "center", height: "100%" }}>
-            {/* <h2>codenames</h2> */}
             {possibleFiles ? <CodeNames possibleFiles={possibleFiles} /> : <p>loading</p>}
         </div>
     );
