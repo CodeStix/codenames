@@ -5,8 +5,8 @@ const outputDir = "public";
 
 const fieldSize = 4 * 4;
 const teams = 2;
-const itemsPerTeam = 5;
-const pedestrians = 5;
+const itemsPerTeam = 4;
+const pedestrians = 6;
 const murderer = 1;
 
 const field = [];
@@ -23,8 +23,10 @@ function shuffle(arr) {
 new Array(murderer).fill(0).forEach(() => field.push(-1));
 new Array(pedestrians).fill(0).forEach(() => field.push(0));
 
+const startingTeam = Math.floor(Math.random() * teams);
+
 for (let i = 0; i < teams; i++) {
-    new Array(itemsPerTeam).fill(0).forEach(() => field.push(i + 1));
+    new Array(startingTeam === i ? itemsPerTeam + 1 : itemsPerTeam).fill(0).forEach(() => field.push(i + 1));
 }
 
 if (field.length !== fieldSize) {
@@ -38,5 +40,6 @@ fs.writeFileSync(
     path.join(outputDir, "field.json"),
     JSON.stringify({
         field: field,
+        startingTeam: startingTeam,
     })
 );

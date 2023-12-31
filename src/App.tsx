@@ -29,9 +29,7 @@ function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllA
     }
 
     useEffect(() => {
-        if (props.turnedAllAround) {
-            setShown(new Array(WIDTH * HEIGHT).fill(true));
-        }
+        setShown(new Array(WIDTH * HEIGHT).fill(props.turnedAllAround));
     }, [props.turnedAllAround]);
 
     useEffect(() => {
@@ -39,25 +37,25 @@ function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllA
     }, []);
 
     return (
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${WIDTH}, 200px)`, gridTemplateRows: `repeat(${HEIGHT}, 200px)`, gap: "30px" }}>
-            {new Array(16).fill(0).map((_, i) => (
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${WIDTH}, 60px)`, gridTemplateRows: `repeat(${HEIGHT}, 60px)`, gap: "5px" }}>
+            {new Array(WIDTH * HEIGHT).fill(0).map((_, i) => (
                 <div key={i} style={{}}>
                     <div
                         onClick={() => {
                             let newShown = [...shown];
-                            newShown[i] = !newShown[i];
+                            newShown[i] = props.turnedAllAround || !newShown[i];
                             setShown(newShown);
                         }}
                         style={{
                             background: "#222",
-                            borderRadius: "1rem",
+                            borderRadius: "5px",
                             position: "relative",
                             height: "100%",
                         }}>
                         {!props.turnedAllAround && (
                             <div
                                 style={{
-                                    borderRadius: "1rem",
+                                    borderRadius: "5px",
                                     overflow: "hidden",
                                     backgroundImage: `url("${"/images/" + files[i]}")`,
                                     backgroundPosition: "center center",
@@ -69,7 +67,7 @@ function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllA
                         <div
                             style={{
                                 pointerEvents: "none",
-                                borderRadius: "1rem",
+                                borderRadius: "5px",
                                 position: "absolute",
                                 top: 0,
                                 left: 0,
@@ -101,7 +99,12 @@ function Table(props: { field: number[] }) {
 
     return (
         <div style={{ display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "center", height: "100%" }}>
-            {possibleFiles ? <CodeNames field={props.field} possibleFiles={possibleFiles} turnedAllAround={false} /> : <p>loading</p>}
+            <h2>^</h2>
+            {possibleFiles ? (
+                <CodeNames field={props.field} possibleFiles={possibleFiles} turnedAllAround={window.location.hash === "#secret"} />
+            ) : (
+                <p>loading</p>
+            )}
         </div>
     );
 }
