@@ -4,7 +4,8 @@ const path = require("path");
 const imagesDir = "public/images";
 const outputDir = "public";
 
-const fieldSize = 4 * 4;
+const width = 4;
+const height = 4;
 const teams = 2;
 const itemsPerTeam = 4;
 const pedestrians = 6;
@@ -32,8 +33,8 @@ for (let i = 0; i < teams; i++) {
     new Array(startingTeam === i ? itemsPerTeam + 1 : itemsPerTeam).fill(0).forEach(() => field.push("TEAM_" + i));
 }
 
-if (field.length !== fieldSize) {
-    console.error("Invalid final amount, must be ", fieldSize);
+if (field.length !== width * height) {
+    console.error("Invalid final amount, must be ", width * height);
     process.exit(1);
 }
 
@@ -45,8 +46,10 @@ for (let i = 0; i < Math.random() * 10; i++) {
 fs.writeFileSync(
     path.join(outputDir, "field.json"),
     JSON.stringify({
+        width,
+        height,
         field: field,
-        images: imageFileNames.slice(0, fieldSize),
+        images: imageFileNames.slice(0, width * height),
         startingTeam: "TEAM_" + startingTeam,
     })
 );

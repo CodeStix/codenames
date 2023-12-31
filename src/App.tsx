@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-const WIDTH = 4;
-const HEIGHT = 4;
 const SQUARE_SIZE = "200px";
 
 const COLORS_PER_TYPE: Record<string, string> = {
@@ -14,13 +12,13 @@ const COLORS_PER_TYPE: Record<string, string> = {
 };
 
 function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBorder?: boolean }) {
-    const [shown, setShown] = useState<boolean[]>(() => new Array(WIDTH * HEIGHT).fill(false));
+    const [shown, setShown] = useState<boolean[]>(() => new Array(props.field.width * props.field.height).fill(false));
     const [rotation, setRotation] = useState(0);
     const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
-        setShown(new Array(WIDTH * HEIGHT).fill(props.turnedAllAround));
-    }, [props.turnedAllAround]);
+        setShown(new Array(props.field.width * props.field.height).fill(props.turnedAllAround));
+    }, [props.turnedAllAround, props.field.width, props.field.height]);
 
     function toggleShown(i: number) {
         let newShown = [...shown];
@@ -41,8 +39,8 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                 }
                 case "ArrowRight": {
                     let n = { ...cursor, x: cursor.x + 1 };
-                    if (n.x >= WIDTH) {
-                        n.x = WIDTH - 1;
+                    if (n.x >= props.field.width) {
+                        n.x = props.field.width - 1;
                         setRotation(-90);
                     }
                     setCursor(n);
@@ -59,8 +57,8 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                 }
                 case "ArrowDown": {
                     let n = { ...cursor, y: cursor.y + 1 };
-                    if (n.y >= HEIGHT) {
-                        n.y = HEIGHT - 1;
+                    if (n.y >= props.field.height) {
+                        n.y = props.field.height - 1;
                         setRotation(0);
                     }
                     setCursor(n);
@@ -76,7 +74,7 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                     break;
                 }
                 case "Space": {
-                    toggleShown(cursor.y * WIDTH + cursor.x);
+                    toggleShown(cursor.y * props.field.width + cursor.x);
                     break;
                 }
             }
@@ -99,11 +97,11 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                 borderRadius: "1rem",
                 padding: "20px",
                 display: "grid",
-                gridTemplateColumns: `repeat(${WIDTH}, ${SQUARE_SIZE})`,
-                gridTemplateRows: `repeat(${HEIGHT}, ${SQUARE_SIZE})`,
+                gridTemplateColumns: `repeat(${props.field.width}, ${SQUARE_SIZE})`,
+                gridTemplateRows: `repeat(${props.field.height}, ${SQUARE_SIZE})`,
                 gap: "20px",
             }}>
-            {new Array(WIDTH * HEIGHT).fill(0).map((_, i) => (
+            {new Array(props.field.width * props.field.height).fill(0).map((_, i) => (
                 <div key={i} style={{}}>
                     <div
                         onClick={() => {
@@ -112,7 +110,8 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                         style={{
                             background: "#222",
                             borderRadius: "5px",
-                            outline: Math.floor(i / WIDTH) === cursor.y && i % WIDTH === cursor.x ? "5px solid white" : undefined,
+                            outline:
+                                Math.floor(i / props.field.width) === cursor.y && i % props.field.width === cursor.x ? "5px solid white" : undefined,
                             position: "relative",
                             height: "100%",
                             transform: `rotate(${rotation}deg)`,
@@ -157,6 +156,8 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
 }
 
 type FieldInfo = {
+    width: number;
+    height: number;
     field: string[];
     images: string[];
     startingTeam: string;
