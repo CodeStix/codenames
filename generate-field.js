@@ -12,7 +12,7 @@ const murderer = 1;
 
 const field = [];
 
-const imageFileNames = fs.readdirSync(imagesDir);
+const imageFileNames = fs.readdirSync(imagesDir).filter((e) => !e.endsWith(".json"));
 
 function shuffle(arr) {
     for (let i = 0; i < arr.length; i++) {
