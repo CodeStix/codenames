@@ -1,7 +1,6 @@
 const fs = require("fs");
 const { execSync } = require("child_process");
 const path = require("path");
-const crypto = require("crypto");
 
 const inputDir = "/home/stijn/Pictures/Nieuwjaar 2023-2024/Stijn2";
 const outputDir = "/media/stijn/Documents/Projects/codenames/public/images2";

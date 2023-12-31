@@ -57,6 +57,9 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean }) {
                         )}
                         <div
                             style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                                 pointerEvents: "none",
                                 borderRadius: "5px",
                                 position: "absolute",
@@ -65,10 +68,13 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean }) {
                                 width: "100%",
                                 height: "100%",
                                 backgroundColor: COLORS_PER_TYPE[props.field.field[i]],
+
                                 opacity: shown[i] ? 0.9 : 0,
                                 transform: shown[i] ? `translate(0, 0)` : `translate(-40px, -100px)`,
                                 transition: "300ms",
-                            }}></div>
+                            }}>
+                            {props.field.field[i] === "MURDERER" && <img width="60%" height="auto" src="/user-ninja-solid.svg"></img>}
+                        </div>
                     </div>
                 </div>
             ))}
