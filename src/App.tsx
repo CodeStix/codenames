@@ -111,7 +111,7 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                             background: "#222",
                             borderRadius: "5px",
                             outline:
-                                Math.floor(i / props.field.width) === cursor.y && i % props.field.width === cursor.x ? "5px solid white" : undefined,
+                                Math.floor(i / props.field.width) === cursor.y && i % props.field.width === cursor.x ? "5px solid #222" : undefined,
                             position: "relative",
                             height: "100%",
                             transform: `rotate(${rotation}deg)`,
