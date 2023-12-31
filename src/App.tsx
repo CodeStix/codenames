@@ -13,16 +13,20 @@ const COLORS_PER_TYPE: Record<string, string> = {
     TEAM_3: "#cccc33",
 };
 
-function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean }) {
+function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBorder?: boolean }) {
     const [shown, setShown] = useState<boolean[]>(() => new Array(WIDTH * HEIGHT).fill(false));
 
     useEffect(() => {
         setShown(new Array(WIDTH * HEIGHT).fill(props.turnedAllAround));
     }, [props.turnedAllAround]);
+
     return (
         <div
             className="codenames-grid"
             style={{
+                border: props.showBorder ? `3px dotted ${COLORS_PER_TYPE[props.field.startingTeam]}` : undefined,
+                borderRadius: "1rem",
+                padding: "20px",
                 display: "grid",
                 gridTemplateColumns: `repeat(${WIDTH}, ${SQUARE_SIZE})`,
                 gridTemplateRows: `repeat(${HEIGHT}, ${SQUARE_SIZE})`,
