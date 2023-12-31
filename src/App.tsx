@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { useEffect, useState } from "react";
 
 const WIDTH = 4;
 const HEIGHT = 4;
+const SQUARE_SIZE = "200px";
 
 const COLORS_PER_TYPE: Record<string, string> = {
-    MURDERER: "gray",
+    MURDERER: "#555555",
     PEDESTRIAN: "#ddffdd",
     TEAM_0: "#2255ff",
     TEAM_1: "#ff2222",
@@ -25,8 +24,8 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean }) {
             className="codenames-grid"
             style={{
                 display: "grid",
-                gridTemplateColumns: `repeat(${WIDTH}, 200px)`,
-                gridTemplateRows: `repeat(${HEIGHT}, 200px)`,
+                gridTemplateColumns: `repeat(${WIDTH}, ${SQUARE_SIZE})`,
+                gridTemplateRows: `repeat(${HEIGHT}, ${SQUARE_SIZE})`,
                 gap: "20px",
             }}>
             {new Array(WIDTH * HEIGHT).fill(0).map((_, i) => (
@@ -68,7 +67,6 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean }) {
                                 width: "100%",
                                 height: "100%",
                                 backgroundColor: COLORS_PER_TYPE[props.field.field[i]],
-
                                 opacity: shown[i] ? 0.9 : 0,
                                 transform: shown[i] ? `translate(0, 0)` : `translate(-40px, -100px)`,
                                 transition: "300ms",
