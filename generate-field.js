@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
+const imagesDir = "public/images";
 const outputDir = "public";
 
 const fieldSize = 4 * 4;
@@ -11,6 +12,8 @@ const murderer = 1;
 
 const field = [];
 
+const imageFileNames = fs.readdirSync(imagesDir);
+
 function shuffle(arr) {
     for (let i = 0; i < arr.length; i++) {
         let r = Math.floor(Math.random() * arr.length);
@@ -20,13 +23,13 @@ function shuffle(arr) {
     }
 }
 
-new Array(murderer).fill(0).forEach(() => field.push(-1));
-new Array(pedestrians).fill(0).forEach(() => field.push(0));
+new Array(murderer).fill(0).forEach(() => field.push("MURDERER"));
+new Array(pedestrians).fill(0).forEach(() => field.push("PEDESTRIAN"));
 
 const startingTeam = Math.floor(Math.random() * teams);
 
 for (let i = 0; i < teams; i++) {
-    new Array(startingTeam === i ? itemsPerTeam + 1 : itemsPerTeam).fill(0).forEach(() => field.push(i + 1));
+    new Array(startingTeam === i ? itemsPerTeam + 1 : itemsPerTeam).fill(0).forEach(() => field.push("TEAM_" + i));
 }
 
 if (field.length !== fieldSize) {
@@ -34,12 +37,16 @@ if (field.length !== fieldSize) {
     process.exit(1);
 }
 
-shuffle(field);
+for (let i = 0; i < Math.random() * 10; i++) {
+    shuffle(field);
+    shuffle(imageFileNames);
+}
 
 fs.writeFileSync(
     path.join(outputDir, "field.json"),
     JSON.stringify({
         field: field,
-        startingTeam: startingTeam,
+        images: imageFileNames.slice(0, fieldSize),
+        startingTeam: "TEAM_" + startingTeam,
     })
 );

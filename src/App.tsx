@@ -5,39 +5,30 @@ import "./App.css";
 const WIDTH = 4;
 const HEIGHT = 4;
 
-const COLORS_PER_TYPE: Record<number, string> = {
-    [-1]: "gray",
-    [0]: "#ddffdd",
-    [1]: "#2255ff",
-    [2]: "#ff2222",
+const COLORS_PER_TYPE: Record<string, string> = {
+    MURDERER: "gray",
+    PEDESTRIAN: "#ddffdd",
+    TEAM_0: "#2255ff",
+    TEAM_1: "#ff2222",
+    TEAM_2: "#33bb33",
+    TEAM_3: "#cccc33",
 };
 
-function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllAround: boolean }) {
-    const [files, setFiles] = useState(props.possibleFiles);
+function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean }) {
     const [shown, setShown] = useState<boolean[]>(() => new Array(WIDTH * HEIGHT).fill(false));
-
-    function shuffle() {
-        const f = [...files];
-        for (let i = 0; i < f.length; i++) {
-            let r = Math.floor(Math.random() * f.length);
-            let t = f[i];
-            f[i] = f[r];
-            f[r] = t;
-        }
-        console.log(f);
-        setFiles(f);
-    }
 
     useEffect(() => {
         setShown(new Array(WIDTH * HEIGHT).fill(props.turnedAllAround));
     }, [props.turnedAllAround]);
-
-    useEffect(() => {
-        shuffle();
-    }, []);
-
     return (
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${WIDTH}, 60px)`, gridTemplateRows: `repeat(${HEIGHT}, 60px)`, gap: "5px" }}>
+        <div
+            className="codenames-grid"
+            style={{
+                display: "grid",
+                gridTemplateColumns: `repeat(${WIDTH}, 200px)`,
+                gridTemplateRows: `repeat(${HEIGHT}, 200px)`,
+                gap: "20px",
+            }}>
             {new Array(WIDTH * HEIGHT).fill(0).map((_, i) => (
                 <div key={i} style={{}}>
                     <div
@@ -57,7 +48,7 @@ function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllA
                                 style={{
                                     borderRadius: "5px",
                                     overflow: "hidden",
-                                    backgroundImage: `url("${"/images/" + files[i]}")`,
+                                    backgroundImage: `url("${"/images/" + props.field.images[i]}")`,
                                     backgroundPosition: "center center",
                                     backgroundRepeat: "no-repeat",
                                     backgroundSize: "cover",
@@ -73,7 +64,7 @@ function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllA
                                 left: 0,
                                 width: "100%",
                                 height: "100%",
-                                backgroundColor: COLORS_PER_TYPE[props.field[i]],
+                                backgroundColor: COLORS_PER_TYPE[props.field.field[i]],
                                 opacity: shown[i] ? 0.9 : 0,
                                 transform: shown[i] ? `translate(0, 0)` : `translate(-40px, -100px)`,
                                 transition: "300ms",
@@ -85,36 +76,18 @@ function CodeNames(props: { possibleFiles: string[]; field: number[]; turnedAllA
     );
 }
 
-function Table(props: { field: number[] }) {
-    const [possibleFiles, setPossibleFiles] = useState<string[]>();
-
-    async function getPossbileFiles() {
-        const res = await fetch("/images/files.json");
-        return (await res.json()).files as string[];
-    }
-
-    useEffect(() => {
-        getPossbileFiles().then((e) => setPossibleFiles(e));
-    }, []);
-
-    return (
-        <div style={{ display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "center", height: "100%" }}>
-            <h2>^</h2>
-            {possibleFiles ? (
-                <CodeNames field={props.field} possibleFiles={possibleFiles} turnedAllAround={window.location.hash === "#secret"} />
-            ) : (
-                <p>loading</p>
-            )}
-        </div>
-    );
-}
+type FieldInfo = {
+    field: string[];
+    images: string[];
+    startingTeam: string;
+};
 
 function App() {
-    const [field, setField] = useState<number[]>();
+    const [field, setField] = useState<FieldInfo>();
 
-    async function getField() {
+    async function getField(): Promise<FieldInfo> {
         const res = await fetch("/field.json");
-        return (await res.json()).field as number[];
+        return await res.json();
     }
 
     useEffect(() => {
@@ -125,7 +98,11 @@ function App() {
         return <>loading</>;
     }
 
-    return <Table field={field} />;
+    return (
+        <div style={{ display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "center", height: "100%" }}>
+            <CodeNames field={field} turnedAllAround={window.location.hash === "#secret"} />
+        </div>
+    );
 }
 
 export default App;
