@@ -15,10 +15,81 @@ const COLORS_PER_TYPE: Record<string, string> = {
 
 function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBorder?: boolean }) {
     const [shown, setShown] = useState<boolean[]>(() => new Array(WIDTH * HEIGHT).fill(false));
+    const [rotation, setRotation] = useState(0);
+    const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         setShown(new Array(WIDTH * HEIGHT).fill(props.turnedAllAround));
     }, [props.turnedAllAround]);
+
+    function toggleShown(i: number) {
+        let newShown = [...shown];
+        newShown[i] = props.turnedAllAround || !newShown[i];
+        setShown(newShown);
+    }
+
+    useEffect(() => {
+        function onKeyDown(ev: KeyboardEvent) {
+            switch (ev.code) {
+                case "KeyE": {
+                    setRotation((rotation + 90) % 360);
+                    break;
+                }
+                case "KeyQ": {
+                    setRotation((rotation - 90) % 360);
+                    break;
+                }
+                case "ArrowRight": {
+                    let n = { ...cursor, x: cursor.x + 1 };
+                    if (n.x >= WIDTH) {
+                        n.x = WIDTH - 1;
+                        setRotation(-90);
+                    }
+                    setCursor(n);
+                    break;
+                }
+                case "ArrowLeft": {
+                    let n = { ...cursor, x: cursor.x - 1 };
+                    if (n.x < 0) {
+                        n.x = 0;
+                        setRotation(90);
+                    }
+                    setCursor(n);
+                    break;
+                }
+                case "ArrowDown": {
+                    let n = { ...cursor, y: cursor.y + 1 };
+                    if (n.y >= HEIGHT) {
+                        n.y = HEIGHT - 1;
+                        setRotation(0);
+                    }
+                    setCursor(n);
+                    break;
+                }
+                case "ArrowUp": {
+                    let n = { ...cursor, y: cursor.y - 1 };
+                    if (n.y < 0) {
+                        n.y = 0;
+                        setRotation(180);
+                    }
+                    setCursor(n);
+                    break;
+                }
+                case "Space": {
+                    toggleShown(cursor.y * WIDTH + cursor.x);
+                    break;
+                }
+            }
+
+            console.log("key", ev);
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", onKeyDown);
+        };
+    }, [cursor, rotation, shown]);
 
     return (
         <div
@@ -36,15 +107,16 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                 <div key={i} style={{}}>
                     <div
                         onClick={() => {
-                            let newShown = [...shown];
-                            newShown[i] = props.turnedAllAround || !newShown[i];
-                            setShown(newShown);
+                            toggleShown(i);
                         }}
                         style={{
                             background: "#222",
                             borderRadius: "5px",
+                            outline: Math.floor(i / WIDTH) === cursor.y && i % WIDTH === cursor.x ? "5px solid white" : undefined,
                             position: "relative",
                             height: "100%",
+                            transform: `rotate(${rotation}deg)`,
+                            transition: "500ms",
                         }}>
                         {!props.turnedAllAround && (
                             <div
