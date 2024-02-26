@@ -4,11 +4,11 @@ const path = require("path");
 const imagesDir = "public/images";
 const outputDir = "public";
 
-const width = 4;
-const height = 4;
+const width = 5;
+const height = 5;
 const teams = 2;
-const itemsPerTeam = 4;
-const pedestrians = 6;
+const itemsPerTeam = 7;
+const pedestrians = 9;
 const murderer = 1;
 
 const field = [];
@@ -34,7 +34,7 @@ for (let i = 0; i < teams; i++) {
 }
 
 if (field.length !== width * height) {
-    console.error("Invalid final amount, must be ", width * height);
+    console.error("Invalid final amount, must be ", field.length, width * height);
     process.exit(1);
 }
 

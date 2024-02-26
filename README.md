@@ -1,4 +1,14 @@
-# Getting Started with Create React App
+# Getting Started with Codenames
+
+## How to play Codenames
+
+1. Run `npm install`
+2. Adjust the clean-pictures script and adjust the input/output paths
+3. Run `node clean-pictures.js`. It will convert all the pictures/videos to the same format (jpg/png). (heic-convert required for iPhone images and ffmpeg for video files)
+4. Run `node generate-field.js` to generate a new codenames field.
+5. Run `npm run start`
+6. Play the game. (You can control using the arrow keys and spacebar to flip cards)
+7. If you want new field, first run `node move-pictures.js` then `node generate-field.js` (move-pictures.js will move the current pictures to a temporary location so the same picture doesn't appear twice)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -3,7 +3,7 @@ const { execSync } = require("child_process");
 const path = require("path");
 
 const inputDir = "/home/stijn/Pictures/Nieuwjaar 2023-2024/Stijn2";
-const outputDir = "/media/stijn/Documents/Projects/codenames/public/images2";
+const outputDir = "./public/images";
 
 const outputFiles = new Set();
 

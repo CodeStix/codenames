@@ -77,6 +77,10 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                     toggleShown(cursor.y * props.field.width + cursor.x);
                     break;
                 }
+                case "KeyW": {
+                    setShown(new Array(props.field.width * props.field.height).fill(true));
+                    break;
+                }
             }
 
             console.log("key", ev);
@@ -111,7 +115,7 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                             background: "#222",
                             borderRadius: "5px",
                             outline:
-                                Math.floor(i / props.field.width) === cursor.y && i % props.field.width === cursor.x ? "5px solid #222" : undefined,
+                                Math.floor(i / props.field.width) === cursor.y && i % props.field.width === cursor.x ? "5px solid white" : undefined,
                             position: "relative",
                             height: "100%",
                             transform: `rotate(${rotation}deg)`,
@@ -142,7 +146,7 @@ function CodeNames(props: { field: FieldInfo; turnedAllAround: boolean; showBord
                                 width: "100%",
                                 height: "100%",
                                 backgroundColor: COLORS_PER_TYPE[props.field.field[i]],
-                                opacity: shown[i] ? 0.9 : 0,
+                                opacity: shown[i] ? 0.6 : 0,
                                 transform: shown[i] ? `translate(0, 0)` : `translate(-40px, -100px)`,
                                 transition: "300ms",
                             }}>
