@@ -44,7 +44,9 @@ for (const filePath of fs.readdirSync(inputDir)) {
             break;
         }
 
+        case ".webm":
         case ".mp4":
+        case ".mkv":
         case ".mov": {
             // Convert to gif
             try {
